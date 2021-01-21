@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-
+import re
 
 # Help Function - 수정하지 말 것
 def get_morse_code_dict():
@@ -95,9 +95,23 @@ def is_validated_english_sentence(user_input):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-    result = None
+    tmp = re.sub('.,!?', '', user_input)
+    tt = len(tmp)
+    if tt==0:
+        return False
+    else:
+        for j in tmp:
+            if int(tmp[j]) == 32:
+                count+=1
+            elif tmp[j].isdigit():
+                return False
+            elif tmp[j] in "_@#$%^&*()-+=][}{;:\|`~" or int(user_input[j]) in [34, 39]:
+                return False
+            else:
+                return True
 
-    return result
+        if count == len(tmp):
+            return False
     # ==================================
 
 
@@ -126,9 +140,20 @@ def is_validated_morse_code(user_input):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-
-
-    return result
+    k=len(user_input)
+    check = 0
+    for i in range(k):
+        if user_input[i] in ["-", ".", " "]:
+            check+=1
+    if check==k:
+        tmp = user_input.split()
+        m = get_morse_code_dict()
+        for k in tmp:
+            if tmp[k] in m.values() is False:
+                return False
+        return True
+    else:
+        return False
     # ==================================
 
 
@@ -152,8 +177,10 @@ def get_cleaned_english_sentence(raw_english_sentence):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-    result = None
-
+    res = re.sub('[.,!?]','',raw_english_sentence)
+    tmp = res.split()
+    result = " ".join(tmp)
+    
     return result
     # ==================================
 
